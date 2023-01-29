@@ -9,11 +9,29 @@ function generateData() {
   let data = {};
   for (i = 0; i < localStorage.length; i++) {
     const key = localStorage.key(i);
-    data[i] = localStorage.getItem(key);
+    const task = JSON.parse(localStorage.getItem(key));
   }
-  return data;
 }
+generateData();
 
+(() => {
+  const date = new Date("2023-01-28");
+  const today = new Date("2023-01-22");
+  const firstDayofWeek = new Date();
+  firstDayofWeek.setDate(today.getDate() - today.getDay());
+  const lastDayofWeek = new Date();
+  lastDayofWeek.setDate(firstDayofWeek.getDate() + 6);
+  console.log(lastDayofWeek);
+
+  if (
+    date.getDate() >= firstDayofWeek.getDate() &&
+    date.getDate() <= lastDayofWeek.getDate()
+  ) {
+    console.log("Date is within the week");
+  } else {
+    console.log("Date is not within the week");
+  }
+})();
 (() => {
   const menu = document.querySelectorAll(".menu>div");
   menu.forEach((submenu) => {
@@ -22,8 +40,14 @@ function generateData() {
       } else if (submenu.target.className === "today") {
       } else if (submenu.target.className === "week") {
         const tasklist = document.querySelector(".task-list");
-        const data = generateData();
-        console.log(data);
+        // let today = new Date();
+        // const dd = today.getDate() + 7;
+        // const mm = today.getMonth() + 1;
+        // const yyyy = today.getFullYear();
+        // today = `${yyyy}` + "-" + `0${mm}` + "-" + `${dd}`;
+        // todaynew = `${yyyy}` + "-" + `0${mm}` + "-" + `${dd - 7}`;
+        // console.log(today);
+        // console.log(todaynew);
       }
     });
   });
@@ -110,6 +134,6 @@ function saveTask(title, date) {
       title: title,
       date: date.value,
     };
-    console.log(task.date);
+    localStorage.setItem(task.title, JSON.stringify(task));
   });
 }
