@@ -21,6 +21,8 @@ const addTask = (title, date) => {
       cancel.classList.add("cancel");
       cancel.textContent = cancel.className.toUpperCase();
       const textbox = document.createElement("input");
+      textbox.classList.add("task-name");
+      textbox.type = "text";
       div.classList.add("addtask");
       div.appendChild(textbox);
       div.appendChild(wrapper);
@@ -28,15 +30,28 @@ const addTask = (title, date) => {
       wrapper.appendChild(cancel);
       tasklist.appendChild(div);
       task.setAttribute("style", "visibility:hidden");
-
       const buttons = document.querySelectorAll("button");
       buttons.forEach((button) => {
         button.addEventListener("click", () => {
           if (button.className === "add") {
-            console.log("add");
+            if (textbox.value === "") {
+              alert("Task name should not be empty!");
+            } else {
+              const taskname = textbox.value;
+              const newtask = document.createElement("div");
+              newtask.classList.add("newtask");
+              newtask.id = taskname;
+              const text = document.createElement("p");
+              text.classList.add("newtask-name");
+              text.textContent = taskname;
+              newtask.appendChild(text);
+              tasklist.appendChild(newtask);
+              div.remove();
+              task.setAttribute("style", "visibility:visible");
+            }
           } else if (button.className === "cancel") {
             task.setAttribute("style", "visibility:visible");
-            tasklist.innerHTML = "";
+            div.remove();
           }
         });
       });
