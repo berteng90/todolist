@@ -5,6 +5,30 @@ const addTask = (title, date) => {
   };
 };
 
+function generateData() {
+  let data = {};
+  for (i = 0; i < localStorage.length; i++) {
+    const key = localStorage.key(i);
+    data[i] = localStorage.getItem(key);
+  }
+  return data;
+}
+
+(() => {
+  const menu = document.querySelectorAll(".menu>div");
+  menu.forEach((submenu) => {
+    submenu.addEventListener("click", (submenu) => {
+      if (submenu.target.className === "inbox") {
+      } else if (submenu.target.className === "today") {
+      } else if (submenu.target.className === "week") {
+        const tasklist = document.querySelector(".task-list");
+        const data = generateData();
+        console.log(data);
+      }
+    });
+  });
+})();
+
 (() => {
   const task = document.querySelector(".task");
   task.addEventListener("click", () => {
@@ -44,9 +68,15 @@ const addTask = (title, date) => {
               const text = document.createElement("p");
               text.classList.add("newtask-name");
               text.textContent = taskname;
+              const date = document.createElement("input");
+              date.type = "date";
+              date.id = "dtpicker";
               newtask.appendChild(text);
+              newtask.appendChild(date);
               tasklist.appendChild(newtask);
               div.remove();
+              setDateMinimum(date);
+              saveTask(taskname, date);
               task.setAttribute("style", "visibility:visible");
             }
           } else if (button.className === "cancel") {
@@ -59,5 +89,27 @@ const addTask = (title, date) => {
   });
 })();
 
-function createTask(title, date) {}
-createTask();
+function setDateMinimum(date) {
+  let range = new Date();
+  let dd = range.getDate();
+  let mm = range.getMonth() + 1;
+  const yyyy = range.getFullYear();
+  if (dd < 10) {
+    dd = "0" + dd;
+  }
+  if (mm < 10) {
+    mm = "0" + mm;
+  }
+  range = yyyy + "-" + mm + "-" + dd;
+  date.setAttribute("min", range);
+}
+
+function saveTask(title, date) {
+  date.addEventListener("change", () => {
+    const task = {
+      title: title,
+      date: date.value,
+    };
+    console.log(task.date);
+  });
+}
